@@ -1,19 +1,31 @@
-require 'date'
 
-def calculate_day_of_week(year,month,day)
-    date = Date.new(year,month,day)
-    day_of_week = date.wday
-    day_names =  %W(日 月 火 水 木 金 土)
-    day_name = day_names[day_of_week]
-    
-    return day_name
+def run_by_1min
+  loop do
+    now = Time.now
+    if weekday?(now) && ontime?(now)
+      puts "平日16:55です！"  
+    end
+    sleep 60
+  end
 end
 
-print "年月日をYYYY-MM-DD形式で入力してください"
+def weekday?(time)
+  # timeが平日かどうかを検知する
+  time.wday >= 1 && time.wday <= 5
+end
+  
+def ontime?(time)
+  # 16:55かどうかの検知
+  time.hour == 16 && time.min == 55
+end
+  
+# テストプログラム
+require 'time'
+time = Time.new(2024,7,29, 16, 17, 0)
+puts weekday?(time) == true
+puts ontime?(time) == false
+time = Time.new(2024,7,28, 16, 55, 0)
+puts weekday?(time) == false
+puts ontime?(time) == true
 
-input = gets.chomp
-year,month,day = input.split('-').map(&:to_i)
-result =calculate_day_of_week(year,month,day)
-
-
-puts "#{year}年#{month}月#{day}日は#{result}曜日です。"
+run_by_1min
